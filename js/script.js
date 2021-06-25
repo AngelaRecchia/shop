@@ -11,4 +11,22 @@ const books = [
 
 ];
 
-console.log(books);
+books.forEach(elem => {
+    const {title, author, price, cover} = elem;
+    console.log(cover);
+    document.getElementById("container").innerHTML +=
+    `
+    <div class="box">
+
+        <img src="${cover}" class="cover">
+
+        <div class="infos">
+            <div class="title">${title}</div>
+            <div class="author">${author}</div>
+            <div class="price">${price.toFixed(2)}€</div>
+        </div>
+    
+
+    </div>
+    `
+})
