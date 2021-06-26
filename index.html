@@ -4,30 +4,82 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <title>BookStore</title>
 </head>
 <body>
-    
-    <div id="container">
 
-        <div class="box" v-for="(book ,index) in books">
+    <header>Book Store</header>
+    <div id="container_big" class="container-fluid h-100">
 
-            <img :src="book.cover" class="cover">
+        <div class="row h-100">
+
+            <div id="container_books" class="col-8">
+                <div class="row gy-4 p-3">
+                    <div class="box col-6 col-sm-4 col-lg-3 col-xl-2" v-for="(book ,index) in books">
     
-            <div class="icons">
-                <i class="fas fa-cart-plus"></i>
-                <i class="far fa-heart"></i>
-                <i class="fas fa-heart"></i>
+                        <div class="cont-img">
+                            <img :src="book.cover" class="cover">
+            
+                            <div class="icons">
+                                <i class="fas fa-cart-plus" @click="addCart(index)"></i>
+                                <i class="far fa-heart" v-if="!wishlist.includes(books[index])" @click="addWishlist(index)"></i>
+                                <i class="fas fa-heart" v-else @click="removeWishlist(book)"></i>
+                            </div>
+                        </div>
+
+                        <div class="title">{{book.title}}</div>
+                        <div class="author">{{book.author}}</div>
+                        <div class="price">{{book.price.toFixed(2)}}€</div>
+                
+                    </div>
+                </div>
                 
             </div>
     
-            <div class="title">{{book.title}}</div>
-                <div class="author">{{book.author}}</div>
-                <div class="price">{{book.price.toFixed(2)}}€</div>
-    
+            <div id="text" class="col-4">
+
+                <section id="cart">
+                    <div class="title">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Carrello</span>
+                    </div>
+                    
+                    <div v-if="cart.length == 0" class="my-3 text-center">Non ci sono elementi nel carrello</div>
+                    <div class="row my-3 flex-wrap" v-for="book in cart">
+                        <div class="d-none d-lg-block col-lg-2"><img :src="book.cover" class="cover"></div>
+                        <div class="col-9 col-lg-7">
+                            {{book.title}}
+                            <br>
+                            <i class="far fa-trash-alt" @click="removeCart(book)"></i>
+                        </div>
+                        <div class="col-3">{{book.price.toFixed(2)}}€</div>
+                    </div>
+
+                    <div id="totale" v-if="cart.length != 0" class="my-3">Totale: {{totale.toFixed(2)}}€</div>
+                </section>
+
+                <section id="wishlist">
+                    <div class="title">
+                        <i class="fas fa-heart"></i>
+                        <span>Wishlist</span>
+                    </div>
+                    
+                    <div v-if="wishlist.length == 0" class="my-3">La wishlist è vuota</div>
+                    <div class="row my-3 flex-wrap" v-for="book in wishlist">
+                        <img :src="book.cover" class="cover">
+                        <div class="title">{{book.title}}</div>
+                        <div class="author">{{book.author}}</div>
+                        <i class="fas fa-ban mt-3" @click="removeWishlist(book)"></i>
+                    </div>
+
+                </section>
+                
+            </div>
+
         </div>
 
     </div>
